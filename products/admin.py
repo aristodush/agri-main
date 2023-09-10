@@ -22,6 +22,8 @@ class ProductAdmin(admin.ModelAdmin):
     #     return 'custom title'
 
 
+    #Added some changes
+
     search_fields = ('name__name','owner__name', 'quantity', 'location', 'instock', 'created')
     ordering = ('owner', 'name', 'quantity', 'location', 'instock', 'created')
     list_display = ('owner', 'name', 'quantity', 'location', 'instock', 'created')
