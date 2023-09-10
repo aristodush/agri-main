@@ -1,0 +1,159 @@
+{% extends 'main.html' %}
+
+{% load static %}
+{% load humanize %}
+{% block content %}
+
+<!-- Main Section -->
+<main class="settingsPage profile my-md">
+  <div class="container">
+    <div class="layout notifications" style="background:white; margin:auto;">
+
+<div class="contact" style="flex-flow:row;">
+                    <h3>Overall <i onclick="window.location='{% url 'notification' %}';" class="icon-refresh"></i></h3>
+                <hr>
+                <br>
+                <p>
+                 <h6> Declined: &nbsp; <b> {{declined}} </b> </h6>
+                 
+                 <h6> Pending: &nbsp;  <b>  {{pending}} </b> </h6>
+                 
+                 <h6> Confirmed: &nbsp; <b>  {{confirmed}} </b> </h6>
+                  
+                </p>
+
+
+        
+</div>
+
+{% include 'users/chart.html' %}
+
+             
+            
+
+      
+
+        <div style="overflow-x:auto;">
+                <table id="MyData">
+                    <tr>
+                    <td colspan= "2"><b>My orders:</b></td>
+                    <td colspan= "6">
+                     <form id="searchForm" class="form" action="" method="get">
+                   
+                        <input class="input input--text" id="formInput" type="text" name="search_query"
+                            value="{{search_query}}" placeholder="Search................" />
+                     </form>
+                  </th>
+                    <tr class="chk-th">
+                    <th>Reference Code</th>
+                    <th>P Name</th>
+                    <th>Seller</th>
+                    <th>Buyer</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Total(Rwf)</th>
+                    <th colspan = "3"><center>Action</center></th>
+                    </tr>
+                    {% if orders %}
+                    
+                      {% for order in orders  %}
+                      
+                    <tbody id="MyRow"  class="result">
+                        <tr  id="Data" >
+                        <td id="id">{{order.id}}</td>
+                        <td id="productName">{{order.productName}}</td>
+                        <td id="seller">{{order.seller}}</td>
+                        <td id="buyer">{{order.buyer}}</td>
+                        <td id="price">{{order.price}}</td>
+                        <td id="quantity">{{order.quantity}}</td>
+                        
+                         <td id="unity" style="display:none;">{{order.unity}}</td>
+                         <td id="location" style="display:none;">{{order.location}}</td>
+                          
+                         <td id="status" style="display:none;">{{order.status}}</td>
+                          
+                        <td id="total">{{order.line_total|intcomma }} </td>
+                        
+                        
+                        <td  class="open-modal-button "  data-id="{{order.id }}"> <i class="icon-eye-open" style="cursor:pointer;"> </td>
+                       
+
+                        
+
+                          {% if order.buyer.username == request.user.username %}
+                          <td  colspan="2"><span  class="{{order.status}}">{{order.status}}</span></td>
+                          {% else %}
+                          {% if order.status == 'Pending' %}
+                          <td  colspan="2"><i class="icon-remove noti"></i><i class="icon-ok noti"></i></td>
+                          {% else %}
+                           <td colspan="2"><span  class="{{order.status}}">{{order.status}}</span></td>
+
+                          {% endif %}
+                          
+
+                          {% endif %}
+                    
+
+
+                      </tr>
+                    
+                      {% include 'users/modal.html' %}
+
+
+
+
+
+                      {% endfor %}
+                      {% else %}
+                      <tbody>
+                        <tr>
+                      <td id="no-data">No result Yet<td></span>
+                        </tr>
+                      </tbody>
+                  {% endif %}
+
+                </table>
+
+                
+                </div>
+
+        
+</div>
+
+    </div>
+
+
+
+
+  </div>
+</main>
+<script>
+            
+ $(document).ready(function(){
+     $(".open-modal-button").click(function(){
+     var id = $(this).data("id");
+        $("#notifymyModal-"+id).show();
+     });
+
+    $("#decline").click(function(e){
+        e.preventDefault();
+        var formData = $("#myForm").serialize();
+        $.ajax({
+            type: 'POST',
+            url: '{% url 'confirmation' %}',
+            data: formData,
+            beforeSend: function(xhr) {
+                xhr.setRequestHeader("X-CSRFToken", csrf_token);
+            },
+            success: function(response) {
+                console.log(response);
+            }
+        });
+    });
+
+
+   });
+</script>
+
+
+{% endblock content %}

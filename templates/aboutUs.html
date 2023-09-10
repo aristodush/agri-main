@@ -1,0 +1,180 @@
+{% extends 'main.html' %}
+{% load static %}
+{% block content %}
+
+<style>
+    .layout{
+        background: var(--color-white);
+        background:
+    }
+    .layout > .column.column--1of2 {
+    flex-basis: 48%;
+}
+.formPage{
+    background-color:white;
+}
+.layout{
+    min-width:100%;
+    margin: 0rem 10px;
+}
+
+
+.formPage .formWrapper {
+    list-style: none;
+    background: var(--color-white);
+    padding: 0rem;
+}
+
+</style>
+
+
+<!-- Main Section -->
+<main class="home">
+    <div class="layout" >
+        <div class="column column--1of2">
+            
+
+        <main class="formPage my-xl" >
+        <div class="content-box">
+            <div class="formWrapper">
+                <div class="displaying">
+                
+                <h2 class="text-center"> Yield Search</h2>
+                <hr>
+                <br>
+                <p style="justify-content: center; text-align: justify; line-height:1.6;">
+                    
+                <b>The Geo-Based Agricultural Products portal <i>(a.k.a: "YIELD SEARCH") </i> </b>is an innovative online platform that 
+                aims to connect farmers and consumers in more efficiente and sustainable way. 
+                The portal allows farmers to list their locally-grown agricultural products, 
+                such as fruits, vegetables, and meats, and for consumers to search for and purchase 
+                these products based on their location. The platform aims to promote sustainable and 
+                local agriculture by providing a direct link between farmers and consumers, reducing 
+                food waste, and supporting the local economy. 
+                </p>
+
+
+                <br>
+                <h5 class="text-center" style="text-decoration: underline;"><b> Team </b></h4>
+                <div class=" team text-center">
+                    
+                    <div class = "person">
+                    
+                         <img class="avatar avatar--md" src="{% static 'images/profiles/aristo.jpg' %}" />
+
+                        <p>Names: Aristo </p>
+                          <p>Reg No: 219004381 </p>
+                          <p>Role: Developer </p>
+                      
+                         
+                    </div>
+                    <div class = "person">
+                    
+                
+                         <img class="avatar avatar--md" src="{% static 'images/profiles/mugisha.jpeg' %}" />
+
+                         <p>Names: Narcisse </p>
+                          <p>Reg No: 219002303 </p>
+                          <p>Role: Analyst </p>
+                      
+                         
+
+                    </div>
+                    <div class = "person">
+                    
+                        <img class="avatar avatar--md" src="{% static 'images/profiles/stana.jpeg' %}" />
+                        
+                        <p>Names: Stana </p>
+                          <p>Reg No: 219008326 </p>
+                          <p>Role: Designer </p>
+                      
+                         
+
+                    </div>
+               
+
+
+                </div>
+               
+
+
+                <br>
+                <h5 class="text-center" style="text-decoration: underline;"><b> Keep in touch </b></h4>
+                    <div class="dev__social">
+
+                        <i class="icon-linkedin"></i> @agri-portal
+                        <i class="icon-facebook"></i> @agri-portal
+                        <i class="icon-youtube"></i> @agri-portal
+                        <i class="icon-instagram"></i> @agri-portal
+
+                    </div>
+
+            </div></div>
+        </div>
+    </main>
+
+        </div>
+
+        
+
+        <div class="column column--1of2" style="border-right: 2px solid #000; ">
+            
+
+
+    <main class="formPage my-xl" >
+        <div class="content-box" >
+            <div class="formWrapper">
+                
+                <h3 class="text-center"> Leave an inquiry </h3>
+       
+               
+                <form class="form" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                {% if request.user.is_authenticated == False %}
+                <div class="form__field">
+                    <label for="formInput#text">{{form.name.label}}</label>
+                    {{form.name}}
+                </div>
+
+                <div class="form__field">
+                    <label for="formInput#text">{{form.email.label}}</label>
+                    {{form.email}}
+                </div>
+                {% endif %}
+
+                <div class="form__field">
+                    <label for="formInput#text">{{form.subject.label}}</label>
+                    {{form.subject}}
+                </div>
+
+                <div class="form__field">
+                    <label for="formInput#text">Inquiry Description</label>
+                    {{form.body}}
+                </div>
+
+                <div class="form__field">
+                    <label for="formInput#text">Supporting Document</label>
+                    {{form.attachment}}
+                </div>
+
+                <input class="btn btn--sub btn--lg  my-md" type="submit" value="Send" />
+            </form>
+
+            <b>Note:</b>
+            If you are facing order problem you might need to provide it reference code<br><br>
+            
+
+
+            <p style="float:right; color:#000;">Using Smartphone? &nbsp; <b>Download app <a href="https://www.appilix.com/uploads/app-final-apk-63cff29e2f43a-1674572446.apk">  &nbsp;  <i class="icon-android"></i> &nbsp; Click here</a></b></p>
+            </div>
+        </div>
+    </main>
+
+            
+        </div>
+    </div>
+
+</main>
+
+{% endblock content %}

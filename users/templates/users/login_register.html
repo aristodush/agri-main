@@ -1,0 +1,127 @@
+{% extends 'main.html' %}
+{% load static %}
+{% block content %}
+
+
+{% if page == 'register' %}
+
+<div class="auth" style="line-height:1.9rem;">
+    <div class="card">
+        <div class="auth__header text-center" >
+            <a href="/">
+                <img src="{% static 'images/profiles/user-default.png' %}" alt="icon" style="width:6rem; height:6rem; aliign-self:center;" />
+            </a>
+            <h5><b>Register an Account<b></h5><br>
+            <p>Create a new  account</p>
+        </div>
+
+        <form method="POST" action="{% url 'register' %}"  class="form auth__form">
+            {% csrf_token %} 
+ 
+
+            <!-- 2 Columns Layout -->
+            <div class="layout" style="justify-content: space-evenly;">
+
+
+
+                 {% for field in form %}
+                        <div class="column column--1of2" style="margin-bottom:0rem;"><div class="form__field">
+                            <label for="formInput#text">{{field.label}}</label></div>
+                            <div class="column column--1of2" style="margin-bottom:0rem;">{{field}}   </div></div>
+
+                            <!-- {% if field.help_text %}
+                            <small>{{field.help_text}}</small>
+                            {% endif %} -->
+
+                            {% for error in field.errors %}
+                            <p style="color: red;">{{error}}</p>
+                            {% endfor %}
+
+                     
+
+            {% endfor %}
+            </div>
+
+           
+
+            <div class="auth__actions" style="margin-top:0rem">
+                <input class="btn btn--sub btn--lg" type="submit" value="Next" />
+            </div>
+        </form>
+        <div class="auth__alternative">
+            <p>Already have an Account?</p> 
+             <p style="float:right; color:#000;">Using Smartphone? &nbsp; <b><a href="https://www.appilix.com/uploads/app-final-apk-63cff29e2f43a-1674572446.apk">  &nbsp;  <i class="icon-android"></i> &nbsp; Use app</a></b></p>
+           
+
+            <a href="{% url 'login' %}">Log In</a>
+        </div>
+    </div>
+</div>
+
+
+
+{% else %}
+
+<div class="auth">
+
+    <div class="card">
+
+        <div class="auth__header text-center">
+            <a href="/">
+                <img src="{% static 'images/favicon.png' %}" alt="icon" style="width:6rem; height:6rem; aliign-self:center;" />
+            </a>
+            <h3>Account Login</h3>
+            <p>Hello Dear, Welcome Back!</p>
+        </div>
+
+        <form action="" method="POST" class="form auth__form">
+            {% csrf_token %}
+            <!-- Input:Username -->
+            <div class="form__field">
+                <label for="formInput#text">Username: </label>
+                <input class="input input--text" id="formInput#text" type="text" name="username"
+                    placeholder="Enter your username..." />
+            </div>
+
+            <!-- Input:Password -->
+            <div class="form__field">
+                <label for="formInput#password">Password: </label>
+                <input class="input input--password" id="formInput#passowrd" type="password" name="password"
+                    placeholder="••••••••" />
+            </div>
+
+            <div class="auth__actions">
+                <input class="btn btn--sub btn--lg" type="submit" value="Log In" />
+                <a href="{% url 'reset_password' %}">Forget Password?</a>
+            </div>
+        </form>
+
+            <p style="float:right; color:#000;">Using Smartphone? &nbsp; <b><a href="https://www.appilix.com/uploads/app-final-apk-63cff29e2f43a-1674572446.apk">  &nbsp;  <i class="icon-android"></i> &nbsp; Use app</a></b></p>
+           
+
+        <div class="auth__alternative">
+            <p>Don’t have an Account?</p>
+            <a href="{% url 'register' %}">Sign Up</a>
+        </div>
+    </div>
+</div>
+
+
+{% endif %}
+<script type="text/javascript">
+    $(document).ready(function() {
+    
+    $("#id_phone").on("input", function() {
+        validateInput(this);
+    });
+});
+function validateInput(input) {
+    var phone_number = input.value;
+    if (!/^[0-9+-]+$/.test(phone_number)) {
+        input.value = phone_number.slice(0, -1);
+    }
+}
+
+</script>
+
+{% endblock content %}

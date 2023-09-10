@@ -1,0 +1,189 @@
+{% extends 'main.html' %}
+
+{% load static %}
+{% load humanize %}
+{% block content %}
+
+<!-- Main Section -->
+<main class="settingsPage profile my-md">
+  <div class="container">
+    <div class="layout">
+      <div class="column column--1of3">
+        <div class="card text-center">
+          <div class="card__body dev">
+            <a class="tag tag--pill tag--main settings__btn" href="{% url 'edit-account' %}"><i class="fa icon-edit"></i>
+              Edit</a>
+
+
+
+            <img id="myModalImg" alt="{{profile.name}}" class="avatar avatar--xl dev__avatar" src="{{profile.imageURL}}" />
+             <!-- The Modal -->
+                        <div id="myModalImage" class="modalImage">
+
+                        <!-- Modal content -->
+                        <div class="modal-contentImage">
+                            <span class="closeImage">&times;</span>
+                            <p> <img class="modal-contentImage" id="productImage"></p>
+                            <div id="captionImage"></div>
+                        </div>
+
+                        </div>
+
+
+            <h3 class="dev__name">{{profile.name}}</h3>
+            <p class="dev__title">{{profile.short_into}}</p>
+            <p class="dev__location"><i class="fa icon-map-marker" ></i> &nbsp;{{profile.location}} &nbsp; <span style="font-color:#000;">({{request.user.status}})</span></p>
+            <p class="dev__location"><i class="fa icon-calendar" ></i> Born {{profile.born}}</p>
+            <p class="dev__location"><i class="fa icon-user" ></i> Username:  {{profile.username}}</p>
+
+            <br>
+            <p class="dev__name">Contact</p>
+            <hr>
+            <div class="contact">
+              <b>Email:</b> <br>
+             &nbsp; <i class="fa icon-envelope-alt"></i>&nbsp;{{request.user.email}} <br><br>
+
+              <b>Main Phone:</b> <br>
+              &nbsp; <i class="fa fa icon-phone"></i>&nbsp;&nbsp;{{request.user.phone}} <br><br>
+
+              {% if profile.phone1 %}
+              
+              <b>Second phone:</b> <br>
+              &nbsp; <i class="fa icon-phone-sign"></i>&nbsp;&nbsp;{{profile.phone1}} <br><br>
+              {% endif %}
+
+              {% if profile.phone2 %}
+              
+              <b>Other :</b> <br>
+              &nbsp; <i class="fa fa icon-phone-sign"></i>&nbsp;&nbsp;{{profile.phone2}} 
+              {% endif %}
+            </div>
+
+       
+
+          </div>
+        </div>
+      </div>
+      <div class="column column--2of3">
+        <div class="devInfo">
+          <h3 class="devInfo__title settings__title">About Me <input type="text" placeholder="Search ..." class="input-search" id="Search"/></h3>
+          <p class="devInfo__about">{{profile.bio}}</p>
+        </div>
+      
+        
+
+        <div class="settings">
+          <h3 class="settings__title">Training</h3> 
+          <a class="tag tag--pill tag--sub settings__btn tag--lg" style="background:#9f9fc3; color:#000;" href="{% url 'create-training' %}"><i
+              class="im im-plus"></i> Add Training</a>
+        </div>
+
+        <table class="settings__table"  id="MyTable">
+          {% if trainings %}
+          {% for training in trainings %}
+         
+          <tr class="chk-th">
+            <td class="settings__thumbnail">
+              {% comment %} <a href="{{training.imageURL}}"><img src="{{training.imageURL}}" alt="Training Thumbnail" /></a> {% endcomment %}
+            <a href="{{training.imageURL}}"><img src=" {% static 'images/certificates/certificate.png' %} "  style="height: 8rem;" alt="Training Thumbnail" /></a>
+            </td>
+            <td class="settings__tableInfo" >
+              <a href="#">{{training.trainer}}</a> &nbsp; <span class="black"> Completed: {{training.completed}}</span><br><br>
+              <p>{{training.description|slice:"100"}}</p>
+            </td>
+            <td class="settings__tableActions">
+              <a class="tag tag--pill tag--main settings__btn" href="{% url 'update-training' training.id %}"><i
+                  class="fa icon-pencil"></i> Edit</a>
+              <a class="tag tag--pill tag--main settings__btn"
+                href="{% url 'delete-training' training.id %}?next=/account"><i class="fa icon-trash"></i> 
+                Delete</a>
+            </td>
+          </tr>
+          {% endfor %}
+
+          {% else %}
+
+
+                <p id="no-data">No Data yet</p>
+          {% endif %}
+          
+        </table>
+        
+
+        
+
+
+
+            <div class="settings">
+          <h3 class="settings__title">Products</h3>
+              {% if profile.account == 'Farmer' or profile.account == 'Rancher'   %}
+
+          <a class="tag tag--pill tag--sub settings__btn tag--lg" style="background:#9f9fc3; color:#000;" href="{% url 'create-product' %}"><i
+              class="im im-plus"></i> Add Product</a>
+              {% endif %}
+        </div>
+
+        <table class="settings__table" id="MyTable">
+          {% if products %}
+          {% for product in products %}
+          <tr class="chk-th">
+            <td class="settings__thumbnail">
+              <a href="{% url 'product' product.id %}"><img src="{{product.imageURL}}" alt="Product Thumbnail" /></a>
+            </td>
+            <td class="settings__tableInfo">
+              <a href="{% url 'product' product.id %}">{{product.name.name}}</a>
+              <p class="tag tag--pill tag--main state"> {{product.quantity}}  {{product.name.unity}}</p>
+              {% if product.instock == True %}
+              <p class="tag tag--pill tag--main stat">
+                On Trade
+              </p>
+              {% else %}
+              <p class="tag tag--pill tag--main stat">
+                Resell
+              </p>
+              {% endif %}
+              <p>{{product.description|slice:"150"}}</p>
+            </td>
+            
+             {% if profile.account == 'Farmer' or profile.account == 'Rancher'   %}
+              <td class="settings__tableActions">
+                <a class="tag tag--pill tag--main settings__btn" href="{% url 'update-product' product.id %}"><i
+                    class="fa icon-pencil"></i> Edit</a>
+                <a class="tag tag--pill tag--main settings__btn"
+                  href="{% url 'delete-product'  product.id %}?next=/account"><i class="fa icon-trash"></i> 
+                  Delete</a>
+              </td>
+              
+             {% elif profile.account == 'Trader' %}
+              <td class="settings__tableActions">
+                <a class="tag tag--pill tag--main settings__btn" href="{% url 'trader-update' product.id %}">
+                  Update</a>
+                <a class="tag tag--pill tag--main settings__btn"
+                  href="{% url 'delete-product'  product.id %}?next=/account"><i class="fa icon-trash"></i> 
+                  Delete</a>
+              </td>
+              {% else %}
+              <td class="settings__tableActions">
+                <span id="no-data">No Privelege</span>
+              </td>
+              
+            {% endif %}
+          </tr>
+          {% endfor %}
+          {% else %}
+          
+                <p id="no-data">No Data yet</p>
+          {% endif %}
+         
+
+        </table>
+
+
+      </div>
+    </div>
+  </div>
+</main>
+
+{% endblock %}
+
+

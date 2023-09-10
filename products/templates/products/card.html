@@ -1,0 +1,82 @@
+{% load humanize %}
+
+<!-- Search Result: Product list -->
+    <section class="productsList">
+        <div class="container" >
+            <div class="grid grid--three" id="MyData">
+
+                {% if products %}
+                {% for product in products %}
+                {% if not product.owner == request.user.id %}
+                <div class="column" id="MyRow">
+                    <div class="card product" id="Data">
+                        <a href="{% url 'product' product.id %}" class="product">
+                            <img class="product__thumbnail" src="{{product.imageURL}}" alt="Product thumbnail" /></a>
+                            <div class="card__body">
+                                <h3 class="product__title">{{product.description|slice:"20"}}</h3>
+                                <p><a href="{% url 'user-profile' product.owner.id %}">By
+                                        {{product.owner.name}}</a>
+                                </p>
+                                <span class="product__author"> Updated: {{product.updated|naturaltime }}, <span style="cursor:pointer;" onclick="window.location.href='https://www.google.com/maps/place/{{product.location}}/'"><b>{{product.location}} </b></span> </span>
+                                
+                                <table class="table">
+                                    <tr>
+                                        <td>Available: </td>
+                                        <td>{{product.quantity}} {{product.name.unity}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Initial Price: </td>
+                                        <td>{{product.name.price}} Rwf</td>
+                                    </tr>
+                                </table
+                                
+                                
+                                <p class="product--rating">
+                                    <span style="font-weight: bold;">{{product.vote_ratio}}%</span> Positive
+                                    Feedback ({{product.vote_total}}) Vote{{product.vote_total|pluralize:"s"}}
+                                </p>
+                                </div>
+                                <div class="product__tags" id="{{product.id}}">
+                                    {% if product.owner.username  == request.user.username %}
+                                    <button class="btn btn--sub  buy">
+                                        <small><a style="color:#fff;" href=" {% url 'account' %}">Your own</a></small>
+                                        </button>
+
+                                    {% elif product.quantity > 0 %}
+                                    <button class="btn btn--sub  buy" style="cursor:pointer;" onclick="window.location.href='{% url 'checkout-product' product.id %}'">
+                                        <small>Negotiate</small>
+                                        </button>
+                                    
+                                    {% else %}
+                                    <button class="btn btn--sub btn--lg buy" disabled><small>OUT OF STOCK</small></button>
+                                    {% endif %}
+                                        
+                                
+
+                                   
+
+
+
+                            </div>
+                        
+                    </div>
+                </div>
+                {% else %}
+                 <p id="no-data">No other products Yet</p>
+                {% endif %}
+
+                {% endfor %}
+
+
+                {% else %}
+
+                
+                <p id="no-data">No Data yet</p>
+
+                {% endif %}
+
+            </div>
+        </div>
+    </section>
+
+

@@ -1,0 +1,94 @@
+{% load humanize %}
+<!-- The Modal -->
+              <div id="notifymyModal-{{ order.id }}"  class="notifymodal">
+                  <div class="notifymodal-content">
+                       
+                 <!-- Main Section -->
+    <main class="formPage my-xl">
+        <div class="content-box">
+                
+
+            <div class="formWrapper hr">
+                               <span class="backButton" onclick="$('.notifymodal').hide()" ><i class="fa icon-chevron-left"></i></span> 
+
+    
+                <form class="form" method="POST" action="{% url 'confirmation' %}" id="myForm">
+                            {% csrf_token %}
+                            <h4 class="centerme"> Order Information </h4>
+
+                        <div class="layout" style="justify-content: space-evenly;">
+
+                                <div class="column column--1of2"><label for="formInput#text">Order Reference Code </label></div>
+                                <div class="column column--1of2"><input name="order_id" readonly class="input input--text" id="formInput#text" type="text" 
+                            value="{{order.id}}" /></div>
+
+                                <div class="column column--1of2"><label for="formInput#text">Product Name </label></div>
+                                <div class="column column--1of2"><input readonly class="input input--text" id="formInput#text" type="text" 
+                            value="{{order.productName}}" /></div>
+
+                                <div class="column column--1of2"><label for="formInput#text">Seller Names: </label></div>
+                                <div class="column column--1of2"><input readonly class="input input--text" id="formInput#text" type="text" 
+                            value="{{order.seller.name}}" /></div>
+
+                                <div class="column column--1of2"><label for="formInput#text">Buyer Names: </label></div>
+                                <div class="column column--1of2"><input readonly class="input input--text" id="formInput#text" type="text" 
+                            value="{{order.buyer.name}}" /></div>
+
+                                <div class="column column--1of2"><label for="formInput#text">Quantity in {{order.unity}}</label></div>
+                                <div class="column column--1of2"><input readonly class="input input--text" name="weight" id="formInput#text" type="number" 
+                            value="{{order.quantity}}" /></div>
+
+                             <div class="column column--1of2"><label for="formInput#text">Price Per Unit</label></div>
+                               <div class="column column--1of2"><input readonly class="input input--text" id="formInput#text" type="text" 
+                            value="{{order.price}} Rwf" /></div>
+                        
+                            <div class="column column--1of2"><label for="formInput#text">Location</label></div>
+                               <div class="column column--1of2"><input readonly class="input input--text" id="formInput#text" type="text" 
+                            value="{{order.location}} " /></div>
+
+                            
+                                 <div class="column column--1of2"><label for="formInput#text">Reason</label></div>
+                               <div class="column column--1of2"><textarea readonly class="input" id="formInput#text" type="text">
+                                 {{order.request}} </textarea> </div>
+                            
+                                 <div class="column column--1of2"><label for="formInput#text">Response</label></div>
+                               <div class="column column--1of2"><textarea name="response" {% if order.buyer.username == request.user.username %} readonly  {% endif %} placeholder= "Write Something"  class="input" id="formInput#text" type="text">
+                                 {{order.response}} </textarea> </div>
+                               
+                               </div>
+                             <div class="center"><h5>Total: &nbsp; <b> {{order.line_total|intcomma}} Rwf<b></h5></div>
+                               
+
+                 
+                    
+                        <div class="form__field form__field--action center">
+
+                    {% if order.status == 'Pending' %}
+                        {% if order.buyer.username == request.user.username %}
+
+                              <input class="btn btn--sub--outline danger" type="Submit" value="Delete"  name="Delete" />
+                           
+                          {% else %} 
+                            <input class="btn btn--sub--outline danger" type="Submit" value="Decline"  name="decline" />
+                           <input class="btn btn--sub--outline safe" type="Submit" value="Confirm"  name="Confirm" />
+                           
+                           {% endif %}
+                                {% else %}
+                                
+                                 <span class="{{order.status}}" > {{order.status}} </span>
+
+                           {% endif %}
+                        </div>
+                   
+                
+
+
+                </form>
+            </div>
+        </div>
+    </main>
+
+
+                  </div>
+              </div>
+              

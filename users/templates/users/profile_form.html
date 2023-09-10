@@ -1,0 +1,101 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+
+<!-- Main Section -->
+<main class="formPage my-xl">
+    <div class="content-box">
+        <div class="formWrapper">
+            <a class="backButton" href="{% url 'account' %}"><i class="fa icon-chevron-left"></i></a> 
+
+             {% if profile %} <img src="{{profile.imageURL}}" class="product-image" id="myModalImg" >
+            
+            
+                        <!-- The Modal -->
+                        <div id="myModalImage" class="modalImage">
+
+                        <!-- Modal content -->
+                        <div class="modal-contentImage">
+                            <span class="closeImage">&times;</span>
+                            <p> <img class="modal-contentImage" id="productImage"></p>
+                            <div id="captionImage"></div>
+                        </div>
+
+                        </div>
+
+            
+            {% endif %}
+            
+
+            <br>
+
+            <form class="form" method="POST" action="{% url 'edit-account' %}" enctype="multipart/form-data">
+                {% csrf_token %}
+       <!-- 2 Columns Layout -->
+            <div class="layout" style="justify-content: space-evenly;">
+
+
+
+                 {% for field in form %}
+                        <div class="column column--1of2" style="margin-bottom:0rem;"><div class="form__field">
+                            <label for="formInput#text">{{field.label}}</label></div>
+                            <div class="column column--1of2" style="margin-bottom:0rem;">{{field}}   </div></div>
+
+                            <!-- {% if field.help_text %}
+                            <small>{{field.help_text}}</small>
+                            {% endif %} -->
+
+                            {% for error in field.errors %}
+                            <p style="color: red;">{{error}}</p>
+                            {% endfor %}
+
+                     
+
+            {% endfor %}
+            </div>
+
+
+                <input class="btn btn--sub btn--lg  my-md" type="submit" value="Save"  onclick="checkAge()" />
+            </form>
+        </div>
+    </div>
+</main>
+
+
+<script type="text/javascript">
+
+ function checkAge() {
+        let dob = new Date(document.getElementById("id_born").value); // Get the submitted date of birth
+        let today = new Date();
+        let age = today.getFullYear() - dob.getFullYear();
+
+        if (age < 18) {
+            alert("You must be at least 18 years old to submit this form.");
+        } else {
+            return true;
+        }
+    }
+
+
+    $(document).ready(function() {
+    $("#id_phone2").on("input", function() {
+        validateInput(this);
+    });
+    $("#id_phone1").on("input", function() {
+        validateInput(this);
+    });
+    $("#id_nid").on("input", function() {
+        validateInput(this);
+    });
+});
+function validateInput(input) {
+    var phone_number = input.value;
+    if (!/^[0-9+-]+$/.test(phone_number)) {
+        input.value = phone_number.slice(0, -1);
+    }
+}
+
+</script>
+
+{% endblock content %}

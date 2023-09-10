@@ -1,0 +1,66 @@
+{% extends 'main.html' %}
+{% load static %}
+
+{% block content %}
+<!-- Main Section -->
+<main class="messagePage my-xl">
+  <div class="content-box">
+    <div class="message">
+      <a class="backButton" style="float:left;" href="{% url 'feedback' %}"><i class="fa icon-chevron-left"></i></a>
+      {% if inquiry.status == 'Unsolved' %}
+       <button class="tag tag--pill tag--main" style="float:right;" onclick ="return confirm('Is it done?')">
+        <a href="{% url 'markSolved' inquiry.id %}" style="color:#fff;"><small>Mark as Solved</small></a>
+      </button>
+      {% else %}
+       <button class="tag tag--pill tag--main" style="float:right;">
+       <small>{{inquiry.status}}</small>
+      </button>
+      {% endif %}
+
+      <h2 class="message__subject" style="text-align:center;">{{inquiry.name}}</h2>
+      <hr>
+      <h3 class="message__author" style="color:#000; text-align:center;">{{inquiry.subject}}</h3>
+     
+       
+        <p class="message__date">{{inquiry.created}}</p>
+        <div class="message__body" >{{inquiry.body|linebreaksbr}}</div>
+
+         {% if inquiry.attachment %}
+         
+                <a href="{{inquiry.attachment.url}}" ><img src="{% static 'images/Messages/openmessage.png' %}" class="openfile" alt="View Attachment" title="view Attachment"/></a>
+            {% endif %}
+    
+      <hr>
+            {% if inquiry.reply %}
+            <br>
+           <b>Answered:</b>
+              <div class="message__body" >{{inquiry.reply|linebreaksbr}}</div>
+            {% else %}
+            
+         <form action="{% url 'inquiry' inquiry.id %}" class="form"  method="POST">
+          {% csrf_token %}
+    <!-- Textarea -->
+                <div class="form__field">
+                  <label for="formInput#textarea">Reply: </label>
+                  <textarea
+                    class="input input--textarea"
+                    name="message"
+                    id="formInput#textarea"
+                    placeholder="Write something awesome..."
+                  ></textarea>
+                </div>
+                  <!-- Input:Submit / Input:Reset  -->
+                <div class="form__field form__field--action">
+                  <input class="btn" style="color:black;" type="reset" value="Reset" />
+                  <input class="btn btn--main" type="submit" value="Submit" />
+                </div>
+        </form>
+        
+            {% endif %}
+
+  </div></div>
+
+</main>
+{% endblock content %}
+
+{% block footer %}{% endblock footer %}
